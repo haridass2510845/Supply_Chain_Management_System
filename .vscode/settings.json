@@ -1,0 +1,8 @@
+{
+  "java.project.sourcePaths": ["src"],
+  "java.project.outputPath": "WebContent/WEB-INF/classes",
+  "java.project.referencedLibraries": [
+    "WebContent/WEB-INF/lib/*.jar",
+    "C:/Users/Haridass/Downloads/apache-tomcat-9.0.120/apache-tomcat-9.0.120/lib/servlet-api.jar"
+  ]
+}
