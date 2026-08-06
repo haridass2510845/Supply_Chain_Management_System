@@ -19,6 +19,7 @@
         <div class="user-info">
             <span><%= user.getFullName() %></span>
             <span class="role-tag">Administrator</span>
+            <a class="logout" href="change_password.jsp" style="margin-right:6px;">Change Password</a>
             <a class="logout" href="LogoutServlet">Logout</a>
         </div>
     </div>

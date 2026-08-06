@@ -104,6 +104,30 @@ public class UserDAO {
     }
 
     /**
+     * Verifies that the given plain-text password matches the stored hash
+     * for a user. Used to confirm the "current password" before allowing
+     * a change (SRS 2.2 Change Password function).
+     */
+    public boolean verifyPassword(int userId, String plainPassword) {
+        String sql = "SELECT password FROM users WHERE user_id = ?";
+        try (Connection con = DBConnection.getConnection();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String storedHash = rs.getString("password");
+                    return storedHash.equals(PasswordUtil.hashPassword(plainPassword));
+                }
+                return false;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
      * Changes a user's password (used by the "Change Password" function
      * listed in SRS 2.2 Product Functions).
      */

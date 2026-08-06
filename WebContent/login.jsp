@@ -42,9 +42,8 @@
                 <button type="submit" class="btn-login">Sign In</button>
             </form>
 
-
             <p class="demo-note">
-                Don't have an account? Then <a href="register.jsp">register here</a>
+                Don't have an account? <a href="register.jsp">Register here</a>
             </p>
         </div>
     </div>
