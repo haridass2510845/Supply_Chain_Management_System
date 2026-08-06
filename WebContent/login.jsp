@@ -42,10 +42,6 @@
                 <button type="submit" class="btn-login">Sign In</button>
             </form>
 
-            <p class="demo-note">
-                Demo accounts (password: <b>Passw0rd!</b>):<br>
-                admin1 &middot; proc_mgr1 &middot; wh_mgr1 &middot; supplier1 &middot; logistics1
-            </p>
 
             <p class="demo-note">
                 Don't have an account? <a href="register.jsp">Register here</a>
