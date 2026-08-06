@@ -44,7 +44,7 @@
 
 
             <p class="demo-note">
-                Don't have an account? <a href="register.jsp">Register here</a>
+                Don't have an account?Then <a href="register.jsp">Register here</a>
             </p>
         </div>
     </div>
