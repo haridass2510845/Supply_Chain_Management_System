@@ -30,3 +30,22 @@ INSERT INTO users (username, password, full_name, email, role) VALUES
 ('wh_mgr1',      'e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee', 'Suresh Babu',          'warehouse@scms.com',    'WAREHOUSE_MANAGER'),
 ('supplier1',    'e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee', 'ABC Traders Pvt Ltd',  'supplier@scms.com',     'SUPPLIER'),
 ('logistics1',   'e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee', 'Karthik Raja',         'logistics@scms.com',    'LOGISTICS_STAFF');
+
+-- ============================================================
+-- Module 2 (Supplier Management)
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS suppliers (
+    supplier_id    INT AUTO_INCREMENT PRIMARY KEY,
+    supplier_name  VARCHAR(150) NOT NULL,
+    contact_no     VARCHAR(20)  NOT NULL,
+    email          VARCHAR(100),
+    address        VARCHAR(255),
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sample suppliers
+INSERT INTO suppliers (supplier_name, contact_no, email, address) VALUES
+('ABC Traders Pvt Ltd',   '9876543210', 'contact@abctraders.com',    'No. 12, Anna Salai, Chennai'),
+('Global Steel Supplies', '9123456780', 'sales@globalsteel.com',     'Plot 7, Industrial Estate, Coimbatore'),
+('Prime Packaging Co.',   '9988776655', 'info@primepackaging.com',   '45 Market Road, Madurai');

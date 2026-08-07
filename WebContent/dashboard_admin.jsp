@@ -44,11 +44,11 @@
                 <h4>Manage Users</h4>
                 <p>Create, update, or deactivate user accounts across all roles.</p>
             </div>
-            <div class="module-card">
+            <a class="module-card" href="suppliers.jsp" style="text-decoration:none; display:block;">
                 <span class="tag">MOD-02</span>
                 <h4>Manage Suppliers</h4>
                 <p>Add, update, delete, and search supplier records.</p>
-            </div>
+            </a>
             <div class="module-card">
                 <span class="tag">MOD-03</span>
                 <h4>Procurement Overview</h4>

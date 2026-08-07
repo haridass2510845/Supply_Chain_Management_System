@@ -50,3 +50,27 @@ INSERT INTO users (username, password, full_name, email, role) VALUES
 ('logistics1',   'e66860546f18cdbbcd86b35e18b525bffc67f772c650cedfe3ff7a0026fa1dee', 'Karthik Raja',         'logistics@scms.com',    'LOGISTICS_STAFF');
 
 COMMIT;
+
+-- ============================================================
+-- Module 2 (Supplier Management)
+-- SRS section 6 - Supplier_ID, Supplier_Name, Contact_No, Email, Address
+-- ============================================================
+
+CREATE TABLE suppliers (
+    supplier_id    NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    supplier_name  VARCHAR2(150) NOT NULL,
+    contact_no     VARCHAR2(20)  NOT NULL,
+    email          VARCHAR2(100),
+    address        VARCHAR2(255),
+    created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Sample suppliers
+INSERT INTO suppliers (supplier_name, contact_no, email, address) VALUES
+('ABC Traders Pvt Ltd',   '9876543210', 'contact@abctraders.com',    'No. 12, Anna Salai, Chennai');
+INSERT INTO suppliers (supplier_name, contact_no, email, address) VALUES
+('Global Steel Supplies', '9123456780', 'sales@globalsteel.com',     'Plot 7, Industrial Estate, Coimbatore');
+INSERT INTO suppliers (supplier_name, contact_no, email, address) VALUES
+('Prime Packaging Co.',   '9988776655', 'info@primepackaging.com',   '45 Market Road, Madurai');
+
+COMMIT;
