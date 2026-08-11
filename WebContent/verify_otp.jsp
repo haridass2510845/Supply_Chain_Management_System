@@ -1,0 +1,59 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.scms.util.OtpChallenge" %>
+<%@ page import="com.scms.util.EmailUtil" %>
+<%@ page import="com.scms.servlet.RegisterServlet" %>
+<%
+    OtpChallenge challenge = (session != null) ? (OtpChallenge) session.getAttribute(RegisterServlet.SESSION_KEY) : null;
+    if (challenge == null) {
+        response.sendRedirect("register.jsp");
+        return;
+    }
+%>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verify Your Email - Supply Chain Management System</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="login-wrapper">
+        <div class="login-box">
+            <div class="brand-strip">
+                <div class="brand-mark"><span class="crate"></span> SCMS &middot; Control Tower</div>
+                <h1>Verify your email</h1>
+                <p class="subtitle">Enter the 6-digit code we sent to <strong><%= challenge.getEmail() %></strong>.</p>
+            </div>
+
+            <% if (request.getAttribute("errorMessage") != null) { %>
+                <div class="alert alert-error"><%= request.getAttribute("errorMessage") %></div>
+            <% } %>
+            <% if (request.getAttribute("successMessage") != null) { %>
+                <div class="alert alert-success"><%= request.getAttribute("successMessage") %></div>
+            <% } %>
+            <% if (EmailUtil.isDevMode()) { %>
+                <div class="alert alert-success">Dev mode: SMTP isn't configured yet, so the code was printed to the Tomcat console instead of emailed.</div>
+            <% } %>
+
+            <form action="RegisterServlet" method="post">
+                <input type="hidden" name="action" value="verify">
+                <div class="form-group">
+                    <label for="otp">Verification Code</label>
+                    <input type="text" id="otp" name="otp" class="otp-input"
+                           inputmode="numeric" pattern="[0-9]{6}" maxlength="6"
+                           autocomplete="one-time-code" required autofocus>
+                </div>
+                <button type="submit" class="btn-login">Verify &amp; Create Account</button>
+            </form>
+
+            <form action="RegisterServlet" method="post" style="margin-top:10px;">
+                <input type="hidden" name="action" value="resend">
+                <button type="submit" class="btn-secondary" style="width:100%; text-align:center;">Resend Code</button>
+            </form>
+
+            <p class="demo-note">
+                Wrong details? <a href="RegisterServlet?action=cancel">Cancel and start over</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
