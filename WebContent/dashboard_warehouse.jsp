@@ -59,6 +59,10 @@
                 <h4>Warehouse Reports</h4>
                 <p>Generate warehouse operations and inventory status reports.</p>
             </a>
+            <a class="module-card" href="orders.jsp" style="text-decoration:none; display:block;">
+                <h4>Order Fulfillment</h4>
+                <p>Receive customer orders, verify stock, process, and confirm delivery.</p>
+            </a>
         </div>
     </div>
 

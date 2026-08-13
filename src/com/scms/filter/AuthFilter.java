@@ -22,6 +22,7 @@ import java.io.IOException;
         "/my_orders.jsp",
         "/manage_users.jsp",
         "/warehouse.jsp",
+        "/orders.jsp",
         "/logistics.jsp",
         "/reports.jsp",
         "/monitor.jsp"

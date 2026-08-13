@@ -9,7 +9,6 @@ import com.scms.model.InventoryItem;
 import com.scms.model.InventoryTransaction;
 import com.scms.model.PurchaseOrder;
 import com.scms.model.Shipment;
-import com.scms.model.Supplier;
 import com.scms.model.User;
 
 import javax.servlet.RequestDispatcher;

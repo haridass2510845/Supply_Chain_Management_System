@@ -486,6 +486,8 @@ footer.scms-footer {
 .badge-assigned  { color: var(--amber-dark); background: #FBF0DF; }
 .badge-in_transit{ color: #2C5DA8;           background: #E5EDF9; }
 .badge-delivered { color: var(--success);    background: var(--success-bg); }
+.badge-verified  { color: #2C5DA8;           background: #E5EDF9; }
+.badge-processed { color: var(--success);    background: var(--success-bg); }
 
 .summary-strip {
     display: grid;

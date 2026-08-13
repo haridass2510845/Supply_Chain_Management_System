@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * Implements FR2 - Supplier Management (Admin-facing):
@@ -73,9 +72,9 @@ public class SupplierServlet extends HttpServlet {
         action = (action == null) ? "add" : action;
 
         String supplierName = trim(request.getParameter("supplierName"));
-        String contactNo    = trim(request.getParameter("contactNo"));
-        String email        = trim(request.getParameter("email"));
-        String address      = trim(request.getParameter("address"));
+        String contactNo = trim(request.getParameter("contactNo"));
+        String email = trim(request.getParameter("email"));
+        String address = trim(request.getParameter("address"));
 
         if (isEmpty(supplierName) || isEmpty(contactNo)) {
             request.setAttribute("errorMessage", "Supplier name and contact number are required.");
@@ -130,7 +129,8 @@ public class SupplierServlet extends HttpServlet {
 
     /**
      * Only an authenticated ADMIN may manage suppliers (SRS 2.3: Administrator ->
-     * "Manage suppliers"). Anyone else is bounced to their own dashboard or to login.
+     * "Manage suppliers"). Anyone else is bounced to their own dashboard or to
+     * login.
      */
     private boolean isAdmin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
@@ -150,7 +150,7 @@ public class SupplierServlet extends HttpServlet {
     }
 
     private void redirectToList(HttpServletRequest request, HttpServletResponse response,
-                                 String successMessage, String errorMessage) throws IOException {
+            String successMessage, String errorMessage) throws IOException {
         StringBuilder url = new StringBuilder(request.getContextPath()).append("/suppliers.jsp?");
         if (successMessage != null) {
             url.append("success=").append(java.net.URLEncoder.encode(successMessage, "UTF-8"));

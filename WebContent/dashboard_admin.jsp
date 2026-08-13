@@ -59,6 +59,10 @@
                             <h4>Logistics Overview</h4>
                             <p>Track shipments and delivery status across the network.</p>
                         </a>
+                        <a class="module-card" href="orders.jsp" style="text-decoration:none; display:block;">
+                            <h4>Order Fulfillment</h4>
+                            <p>Receive customer orders, verify stock, process, and confirm delivery.</p>
+                        </a>
                         <a class="module-card" href="reports.jsp" style="text-decoration:none; display:block;">
                             <h4>Reports</h4>
                             <p>Generate supplier, procurement, inventory, warehouse, logistics, and order reports.</p>
