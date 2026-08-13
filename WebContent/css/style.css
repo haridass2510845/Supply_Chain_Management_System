@@ -483,6 +483,9 @@ footer.scms-footer {
 .badge-receive   { color: var(--success);    background: var(--success-bg); }
 .badge-dispatch  { color: #2C5DA8;           background: #E5EDF9; }
 .badge-adjustment{ color: var(--ink-soft);   background: #E7EAF2; }
+.badge-assigned  { color: var(--amber-dark); background: #FBF0DF; }
+.badge-in_transit{ color: #2C5DA8;           background: #E5EDF9; }
+.badge-delivered { color: var(--success);    background: var(--success-bg); }
 
 .summary-strip {
     display: grid;

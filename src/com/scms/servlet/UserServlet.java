@@ -1,5 +1,6 @@
 package com.scms.servlet;
 
+import com.scms.dao.SupplierDAO;
 import com.scms.dao.UserDAO;
 import com.scms.model.User;
 
@@ -25,6 +26,7 @@ import java.net.URLEncoder;
 public class UserServlet extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
+    private final SupplierDAO supplierDAO = new SupplierDAO();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -60,6 +62,7 @@ public class UserServlet extends HttpServlet {
                 break;
         }
 
+        request.setAttribute("suppliers", supplierDAO.getAllSuppliers());
         forwardToUsers(request, response);
     }
 
@@ -90,6 +93,7 @@ public class UserServlet extends HttpServlet {
         String fullName = trim(request.getParameter("fullName"));
         String email = trim(request.getParameter("email"));
         String role = trim(request.getParameter("role"));
+        Integer supplierId = "SUPPLIER".equals(role) ? parseSupplierId(request) : null;
 
         if (isEmpty(username) || isEmpty(password) || isEmpty(fullName) || isEmpty(email) || isEmpty(role)) {
             redirectToList(request, response, null, "All fields are required to add a new user.");
@@ -116,7 +120,7 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        boolean created = userDAO.registerUser(username, password, fullName, email, role);
+        boolean created = userDAO.registerUser(username, password, fullName, email, role, supplierId);
         redirectToList(request, response,
                 created ? "User \"" + username + "\" created successfully." : null,
                 created ? null : "Could not create the user. Please try again.");
@@ -127,6 +131,7 @@ public class UserServlet extends HttpServlet {
         String fullName = trim(request.getParameter("fullName"));
         String email = trim(request.getParameter("email"));
         String role = trim(request.getParameter("role"));
+        Integer supplierId = "SUPPLIER".equals(role) ? parseSupplierId(request) : null;
 
         if (userId <= 0 || isEmpty(fullName) || isEmpty(email) || isEmpty(role)) {
             redirectToList(request, response, null, "All fields are required to update a user.");
@@ -143,7 +148,7 @@ public class UserServlet extends HttpServlet {
             return;
         }
 
-        boolean updated = userDAO.updateUserDetails(userId, fullName, email, role);
+        boolean updated = userDAO.updateUserDetails(userId, fullName, email, role, supplierId);
         redirectToList(request, response,
                 updated ? "User updated successfully." : null,
                 updated ? null : "Could not update the user. Please try again.");
@@ -289,6 +294,23 @@ public class UserServlet extends HttpServlet {
             return Integer.parseInt(s);
         } catch (NumberFormatException e) {
             return 0;
+        }
+    }
+
+    /**
+     * Reads the "supplierId" form field, returning null when it's blank
+     * or unparsable (e.g. the placeholder "-- Select supplier --" option) --
+     * that leaves the account unlinked rather than linked to id 0.
+     */
+    private Integer parseSupplierId(HttpServletRequest request) {
+        String raw = trim(request.getParameter("supplierId"));
+        if (isEmpty(raw)) {
+            return null;
+        }
+        try {
+            return Integer.parseInt(raw);
+        } catch (NumberFormatException e) {
+            return null;
         }
     }
 }

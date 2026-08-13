@@ -1,6 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.scms.model.User" %>
+<%@ page import="com.scms.model.Supplier" %>
 <%@ page import="com.scms.dao.UserDAO" %>
+<%@ page import="com.scms.dao.SupplierDAO" %>
 <%@ page import="java.util.List" %>
 <%
     User user = (session != null) ? (User) session.getAttribute("user") : null;
@@ -20,6 +22,13 @@
     }
 
     User editUser = (User) request.getAttribute("editUser");
+
+    // Direct page load -> load the supplier list ourselves too (used by the
+    // "Linked Supplier" field, shown only when the Supplier role is picked).
+    List<Supplier> suppliers = (List<Supplier>) request.getAttribute("suppliers");
+    if (suppliers == null) {
+        suppliers = new SupplierDAO().getAllSuppliers();
+    }
 
     String errorMessage = (String) request.getAttribute("errorMessage");
     if (errorMessage == null) errorMessage = request.getParameter("error");
@@ -116,6 +125,20 @@
                         </select>
                     </div>
 
+                    <% Integer currentSupplierId = (editUser != null) ? editUser.getSupplierId() : null; %>
+                    <div class="form-group" id="supplierLinkGroup" style="<%= "SUPPLIER".equals(currentRole) ? "" : "display:none;" %>">
+                        <label for="supplierId">Linked Supplier</label>
+                        <select id="supplierId" name="supplierId">
+                            <option value="">-- Not linked --</option>
+                            <% for (Supplier s : suppliers) { %>
+                                <option value="<%= s.getSupplierId() %>"
+                                    <%= (currentSupplierId != null && currentSupplierId == s.getSupplierId()) ? "selected" : "" %>>
+                                    <%= s.getSupplierName() %>
+                                </option>
+                            <% } %>
+                        </select>
+                    </div>
+
                     <% if (editUser == null) { %>
                         <div class="form-group">
                             <label for="password">Password</label>
@@ -173,7 +196,12 @@
                                     <td><%= u.getUsername() %></td>
                                     <td><%= u.getFullName() %></td>
                                     <td><%= u.getEmail() != null ? u.getEmail() : "&mdash;" %></td>
-                                    <td><%= u.getRole().replace("_", " ") %></td>
+                                    <td>
+                                        <%= u.getRole().replace("_", " ") %>
+                                        <% if ("SUPPLIER".equals(u.getRole()) && !u.hasLinkedSupplier()) { %>
+                                            <br><span style="color: var(--danger); font-size: 11px;">Not linked</span>
+                                        <% } %>
+                                    </td>
                                     <td>
                                         <span class="badge <%= "ACTIVE".equals(u.getStatus()) ? "badge-active" : "badge-inactive" %>">
                                             <%= u.getStatus() %>
@@ -207,5 +235,16 @@
     </div>
 
     <footer class="scms-footer">SCMS &middot; Supply Chain Management System</footer>
+
+    <script>
+        // Show the "Linked Supplier" dropdown only while the Supplier role is selected.
+        var roleSelect = document.getElementById('role');
+        var supplierGroup = document.getElementById('supplierLinkGroup');
+        if (roleSelect && supplierGroup) {
+            roleSelect.addEventListener('change', function () {
+                supplierGroup.style.display = (roleSelect.value === 'SUPPLIER') ? '' : 'none';
+            });
+        }
+    </script>
 </body>
 </html>

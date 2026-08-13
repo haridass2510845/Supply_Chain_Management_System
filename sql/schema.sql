@@ -131,3 +131,42 @@ CREATE TABLE IF NOT EXISTS inventory_transactions (
 INSERT INTO inventory (item_name, quantity_on_hand, reorder_level, location) VALUES
 ('Steel Rods (12mm)', 120, 100, 'Rack A1'),
 ('Packaging Boxes', 40, 150, 'Rack B3');
+
+-- ============================================================
+-- Module 5 (Logistics Management)
+-- LG-01 Assign Delivery, LG-02 Track Shipment,
+-- LG-03 Update Delivery Status, LG-04 Confirm Delivery
+--
+-- Each shipment fulfils exactly one warehouse DISPATCH transaction --
+-- goods only enter the Logistics pipeline once they've actually left
+-- the warehouse.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS shipments (
+    shipment_id    INT AUTO_INCREMENT PRIMARY KEY,
+    txn_id         INT NOT NULL UNIQUE,
+    destination    VARCHAR(200) NOT NULL,
+    carrier_name   VARCHAR(100) NOT NULL,
+    vehicle_no     VARCHAR(50),
+    status         VARCHAR(20) NOT NULL DEFAULT 'ASSIGNED',
+    assigned_by    VARCHAR(50),
+    assigned_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    in_transit_at  TIMESTAMP NULL,
+    delivered_at   TIMESTAMP NULL,
+    remarks        VARCHAR(255),
+    FOREIGN KEY (txn_id) REFERENCES inventory_transactions(txn_id)
+);
+
+-- ============================================================
+-- Monitor System (Admin): login audit trail
+-- Every login attempt (successful or not) is recorded so the Monitor
+-- System page can show recent activity and flag failed attempts.
+-- ============================================================
+
+CREATE TABLE IF NOT EXISTS login_audit (
+    audit_id      INT AUTO_INCREMENT PRIMARY KEY,
+    username      VARCHAR(50) NOT NULL,
+    success       CHAR(1) NOT NULL,
+    ip_address    VARCHAR(50),
+    attempted_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

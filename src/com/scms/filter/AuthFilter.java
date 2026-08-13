@@ -21,7 +21,10 @@ import java.io.IOException;
         "/purchase_orders.jsp",
         "/my_orders.jsp",
         "/manage_users.jsp",
-        "/warehouse.jsp"
+        "/warehouse.jsp",
+        "/logistics.jsp",
+        "/reports.jsp",
+        "/monitor.jsp"
 })
 public class AuthFilter implements Filter {
 

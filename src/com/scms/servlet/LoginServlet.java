@@ -1,5 +1,6 @@
 package com.scms.servlet;
 
+import com.scms.dao.AuditDAO;
 import com.scms.dao.UserDAO;
 import com.scms.model.User;
 
@@ -21,6 +22,7 @@ import java.io.IOException;
 public class LoginServlet extends HttpServlet {
 
     private final UserDAO userDAO = new UserDAO();
+    private final AuditDAO auditDAO = new AuditDAO();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -39,11 +41,16 @@ public class LoginServlet extends HttpServlet {
         User user = userDAO.authenticate(username.trim(), password);
 
         if (user == null) {
+            // Monitor System (Admin): record every failed attempt.
+            auditDAO.logAttempt(username.trim(), false, request.getRemoteAddr());
             // Output: "Invalid Credentials" (SRS FR1)
             request.setAttribute("errorMessage", "Invalid username or password.");
             forwardToLogin(request, response);
             return;
         }
+
+        // Monitor System (Admin): record every successful attempt too.
+        auditDAO.logAttempt(user.getUsername(), true, request.getRemoteAddr());
 
         // Output: "Login Successful" (SRS FR1) -> create session
         HttpSession session = request.getSession(true);

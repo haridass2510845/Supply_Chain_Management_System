@@ -41,6 +41,20 @@ Supply_Chain_Management_System/
   manual stock adjustments, and see recent warehouse activity. Available to
   ADMIN and WAREHOUSE_MANAGER. `warehouse.jsp` + `WarehouseServlet` +
   `InventoryDAO`.
+- **Module 5 — Logistics Management:** assign a carrier and destination to
+  goods dispatched from the warehouse, track shipments through
+  Assigned -> In Transit -> Delivered, and confirm final delivery. Available
+  to ADMIN and LOGISTICS_STAFF. `logistics.jsp` + `LogisticsServlet` +
+  `LogisticsDAO`. Every shipment is tied to one warehouse dispatch, so goods
+  only enter the logistics pipeline once they've actually left the warehouse.
+- **Reports (Admin):** a read-only cross-module report combining data already
+  produced by every other module -- supplier performance, procurement summary,
+  low-stock inventory alerts, and in-transit shipments. `reports.jsp`. No new
+  tables; it just reads existing DAOs.
+- **Monitor System (Admin):** live database health check, active/inactive
+  account counts, and a login audit trail (every login attempt, successful
+  or not, with username/IP/timestamp). `monitor.jsp` + `AuditDAO` +
+  `login_audit` table. `LoginServlet` now logs every attempt.
 
 ### Email OTP verification (new)
 

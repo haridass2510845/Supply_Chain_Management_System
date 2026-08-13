@@ -52,16 +52,19 @@ public class InventoryDAO {
      */
     public List<PurchaseOrder> getReceivablePOs() {
         List<PurchaseOrder> orders = new ArrayList<>();
+        // Rewritten from NOT IN (subquery) to LEFT JOIN ... WHERE IS NULL:
+        // functionally identical, but the optimizer can use an index on
+        // (txn_type, po_id) for this instead of building/scanning the
+        // subquery result for every outer row.
         String sql = "SELECT po.po_id, po.supplier_id, s.supplier_name, po.item_name, po.quantity, "
                    + "po.unit_price, po.total_amount, po.status, po.created_by, po.created_at, "
                    + "po.approved_by, po.approved_at, po.shipped_at, po.delivered_at, po.remarks "
                    + "FROM purchase_orders po "
                    + "JOIN suppliers s ON s.supplier_id = po.supplier_id "
+                   + "LEFT JOIN inventory_transactions it "
+                   + "    ON it.po_id = po.po_id AND it.txn_type = 'RECEIVE' "
                    + "WHERE po.status = 'COMPLETED' "
-                   + "AND po.po_id NOT IN ("
-                   + "    SELECT it.po_id FROM inventory_transactions it "
-                   + "    WHERE it.txn_type = 'RECEIVE' AND it.po_id IS NOT NULL"
-                   + ") "
+                   + "AND it.txn_id IS NULL "
                    + "ORDER BY po.po_id DESC";
 
         try (Connection con = DBConnection.getConnection();

@@ -184,3 +184,53 @@ COMMIT;
 -- inventory_transactions don't exist yet, just run the two CREATE TABLE
 -- statements above (and the sample INSERTs if you want demo data).
 -- ============================================================
+
+-- ============================================================
+-- Module 5 (Logistics Management)
+-- LG-01 Assign Delivery, LG-02 Track Shipment,
+-- LG-03 Update Delivery Status, LG-04 Confirm Delivery
+--
+-- Each shipment fulfils exactly one warehouse DISPATCH transaction --
+-- goods only enter the Logistics pipeline once they've actually left
+-- the warehouse.
+-- ============================================================
+
+CREATE TABLE shipments (
+    shipment_id    NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    txn_id         NUMBER NOT NULL UNIQUE REFERENCES inventory_transactions(txn_id),
+    destination    VARCHAR2(200) NOT NULL,
+    carrier_name   VARCHAR2(100) NOT NULL,
+    vehicle_no     VARCHAR2(50),
+    status         VARCHAR2(20) DEFAULT 'ASSIGNED' NOT NULL
+                   CONSTRAINT chk_shipment_status
+                   CHECK (status IN ('ASSIGNED','IN_TRANSIT','DELIVERED')),
+    assigned_by    VARCHAR2(50),
+    assigned_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    in_transit_at  TIMESTAMP,
+    delivered_at   TIMESTAMP,
+    remarks        VARCHAR2(255)
+);
+
+-- ============================================================
+-- MIGRATING AN EXISTING DATABASE for Module 5: if shipments doesn't
+-- exist yet, just run the CREATE TABLE statement above.
+-- ============================================================
+
+-- ============================================================
+-- Monitor System (Admin): login audit trail
+-- Every login attempt (successful or not) is recorded so the Monitor
+-- System page can show recent activity and flag failed attempts.
+-- ============================================================
+
+CREATE TABLE login_audit (
+    audit_id      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    username      VARCHAR2(50) NOT NULL,
+    success       CHAR(1) NOT NULL CHECK (success IN ('Y','N')),
+    ip_address    VARCHAR2(50),
+    attempted_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- ============================================================
+-- MIGRATING AN EXISTING DATABASE for Monitor System: if login_audit
+-- doesn't exist yet, just run the CREATE TABLE statement above.
+-- ============================================================

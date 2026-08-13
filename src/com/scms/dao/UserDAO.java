@@ -106,8 +106,20 @@ public class UserDAO {
      */
     public boolean registerUser(String username, String plainPassword, String fullName,
                                  String email, String role) {
-        String sql = "INSERT INTO users (username, password, full_name, email, role, status) "
-                   + "VALUES (?, ?, ?, ?, ?, 'ACTIVE')";
+        return registerUser(username, plainPassword, fullName, email, role, null);
+    }
+
+    /**
+     * Same as {@link #registerUser(String, String, String, String, String)}
+     * but also links the new account to a supplier company record at
+     * creation time -- lets an admin create a SUPPLIER-role account that's
+     * immediately able to see its purchase orders, instead of having to
+     * edit it a second time.
+     */
+    public boolean registerUser(String username, String plainPassword, String fullName,
+                                 String email, String role, Integer supplierId) {
+        String sql = "INSERT INTO users (username, password, full_name, email, role, status, supplier_id) "
+                   + "VALUES (?, ?, ?, ?, ?, 'ACTIVE', ?)";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -117,6 +129,11 @@ public class UserDAO {
             ps.setString(3, fullName);
             ps.setString(4, email);
             ps.setString(5, role);
+            if (supplierId != null) {
+                ps.setInt(6, supplierId);
+            } else {
+                ps.setNull(6, java.sql.Types.INTEGER);
+            }
 
             return ps.executeUpdate() > 0;
 
@@ -274,10 +291,22 @@ public class UserDAO {
 
     /**
      * Updates a user's editable profile fields (username and password are
-     * changed through their own dedicated flows, not here).
+     * changed through their own dedicated flows, not here). Kept for
+     * callers that don't need to touch the supplier link.
      */
     public boolean updateUserDetails(int userId, String fullName, String email, String role) {
-        String sql = "UPDATE users SET full_name = ?, email = ?, role = ? WHERE user_id = ?";
+        return updateUserDetails(userId, fullName, email, role, null);
+    }
+
+    /**
+     * Same as {@link #updateUserDetails(int, String, String, String)} but
+     * also sets (or clears) the supplier_id link -- how a SUPPLIER-role
+     * account gets tied to an actual supplier company record so the
+     * Supplier Portal (my_orders.jsp) has something to show them.
+     * Pass null to clear the link (e.g. when the role is no longer SUPPLIER).
+     */
+    public boolean updateUserDetails(int userId, String fullName, String email, String role, Integer supplierId) {
+        String sql = "UPDATE users SET full_name = ?, email = ?, role = ?, supplier_id = ? WHERE user_id = ?";
 
         try (Connection con = DBConnection.getConnection();
              PreparedStatement ps = con.prepareStatement(sql)) {
@@ -285,7 +314,12 @@ public class UserDAO {
             ps.setString(1, fullName);
             ps.setString(2, email);
             ps.setString(3, role);
-            ps.setInt(4, userId);
+            if (supplierId != null) {
+                ps.setInt(4, supplierId);
+            } else {
+                ps.setNull(4, java.sql.Types.INTEGER);
+            }
+            ps.setInt(5, userId);
             return ps.executeUpdate() > 0;
 
         } catch (SQLException e) {

@@ -39,22 +39,22 @@
         </div>
 
         <div class="card-grid">
-            <div class="module-card">
+            <a class="module-card" href="logistics.jsp" style="text-decoration:none; display:block;">
                 <h4>Assign Delivery</h4>
                 <p>Assign vehicles and drivers to outgoing orders.</p>
-            </div>
-            <div class="module-card">
+            </a>
+            <a class="module-card" href="logistics.jsp" style="text-decoration:none; display:block;">
                 <h4>Track Shipment</h4>
-                <p>Monitor real-time shipment locations and status.</p>
-            </div>
-            <div class="module-card">
+                <p>Monitor shipment status across the network.</p>
+            </a>
+            <a class="module-card" href="logistics.jsp" style="text-decoration:none; display:block;">
                 <h4>Update Delivery Status</h4>
                 <p>Update the delivery status of in-transit orders.</p>
-            </div>
-            <div class="module-card">
+            </a>
+            <a class="module-card" href="logistics.jsp" style="text-decoration:none; display:block;">
                 <h4>Confirm Delivery</h4>
-                <p>Mark orders as successfully delivered to the customer.</p>
-            </div>
+                <p>Mark orders as successfully delivered.</p>
+            </a>
         </div>
     </div>
 
